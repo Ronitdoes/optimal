@@ -36,6 +36,9 @@ Rust/cargo **1.100.0** (`x86_64-pc-windows-gnu`). GPUI **=0.2.2**, windows-rs **
 
 ## Deliverables
 
-- Tag: `v0.0.1` (annotated, points at the O0 integration commit).
-- Branch pushed: `o0/integration`; PR opened to `main` (outcome recorded in the final report).
+- Integration commit: `ff6dd2f` on branch `o0/integration` (pushed to origin).
+- Tag: **v0.0.1** (annotated, points at `ff6dd2f`, pushed to origin).
+- PR: **#1** — https://github.com/Ronitdoes/optimal/pull/1 (`o0/integration` → `main`).
+- Remote `main` was kept at the seed commit `d271413` so the PR contains the O0 diff.
+- CI: run `44169095205` triggered on PR #1 (three jobs: headless, GPUI window, optional validators).
 - This file + `TESTLOG.md` + `DONE-DEFERRED.md` constitute the O0 gate evidence trail.
