@@ -1,0 +1,13 @@
+[package]
+name = "optimal-evals"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+optimal-common.workspace = true
+optimal-policy.workspace = true
+optimal-store.workspace = true
+csv.workspace = true
+serde.workspace = true
+serde_json.workspace = true

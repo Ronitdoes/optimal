@@ -1,0 +1,22 @@
+[package]
+name = "optimal"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+optimal-common.workspace = true
+optimal-policy.workspace = true
+optimal-runtime.workspace = true
+optimal-store.workspace = true
+optimal-gateway.workspace = true
+optimal-ui.workspace = true
+optimal-telemetry.workspace = true
+tokio.workspace = true
+serde_json.workspace = true
+windows.workspace = true
+
+[features]
+default = []
+ui = ["optimal-ui/ui"]
+dpapi = ["optimal-store/dpapi"]
