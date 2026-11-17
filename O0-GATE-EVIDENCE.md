@@ -37,8 +37,8 @@ Rust/cargo **1.100.0** (`x86_64-pc-windows-gnu`). GPUI **=0.2.2**, windows-rs **
 ## Deliverables
 
 - Integration commit: `ff6dd2f` on branch `o0/integration` (pushed to origin).
-- Tag: **v0.0.1** (annotated, points at `ff6dd2f`, pushed to origin).
-- Latest branch commits: `6ba30d1` (evidence), `1eecc25` (CI pin-check fix).
+- Tag: **v0.0.1** (annotated, points at the final branch commit, pushed to origin).
+- Branch commits: `6ba30d1` (evidence), `1eecc25` (CI pin-check fix), `4c15414` (status).
 - PR: **#1** — https://github.com/Ronitdoes/optimal/pull/1 (`o0/integration` → `main`).
 - Remote `main` was kept at the seed commit `d271413` so the PR contains the O0 diff.
 - CI: run `44169888196` on PR #1. Headless job **completed/success**; GPUI-window and
