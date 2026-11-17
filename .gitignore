@@ -1,0 +1,35 @@
+# Rust build artifacts
+target/
+*.rlib
+*.rmeta
+*.pdb
+*.ilk
+*.exp
+*.lib
+
+# Rust/Cargo
+**/*.rs.bk
+
+# Python (sidecars later)
+__pycache__/
+*.pyc
+
+# Local secrets / state (never commit)
+*.pfx
+*.snk
+*.key
+optimal-src/state/
+optimal-src/*.db
+optimal-src/*.db-wal
+optimal-src/*.db-shm
+optimal-src/state/
+
+# Editors / OS
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# rustup bootstrap
+rustup-init.exe
