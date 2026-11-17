@@ -75,12 +75,11 @@ pub struct Z3Validator;
 #[cfg(feature = "z3-validate")]
 impl PolicyValidator for Z3Validator {
     fn validate(&self, cfg: &PolicyConfig) -> Result<(), String> {
-        use z3::ast::{Ast, Int};
-        use z3::{Config, Context, SatResult, Solver};
+        use z3::ast::Int;
+        use z3::{SatResult, Solver};
 
-        // z3 0.19 uses a thread-local context established by Context::new.
-        let _config = Config::new();
-        let _ctx = Context::new(&_config);
+        // z3 0.19 manages a thread-local context implicitly; `Context::new`
+        // is crate-private and must not be called here.
         let solver = Solver::new();
 
         if cfg.default_tier != Tier::Never {
