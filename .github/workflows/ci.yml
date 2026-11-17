@@ -47,7 +47,14 @@ jobs:
           workspaces: optimal-src
       - name: Verify GPUI is the exact pinned version
         working-directory: optimal-src
-        run: cargo tree -i gpui --locked | Select-String -Pattern "gpui v0.2.2"
+        run: |
+          if (-not (Select-String -Path Cargo.toml -Pattern 'gpui = \{ version = "=0.2.2"' -Quiet)) {
+            throw 'GPUI is not pinned to =0.2.2 in Cargo.toml'
+          }
+          if (-not (Select-String -Path Cargo.lock -Pattern 'name = "gpui"' -Quiet)) {
+            throw 'gpui entry missing from Cargo.lock'
+          }
+          cargo tree --locked -p optimal-ui --features ui -i gpui
       - name: Build single binary with UI
         working-directory: optimal-src
         run: cargo build --release --locked -p optimal --features ui
