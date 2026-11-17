@@ -1,0 +1,92 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/common",
+    "crates/policy",
+    "crates/registry",
+    "crates/tools",
+    "crates/runtime",
+    "crates/store",
+    "crates/gateway",
+    "crates/telemetry",
+    "crates/guardian",
+    "crates/ui",
+    "runner",
+    "evals",
+]
+
+[workspace.package]
+version = "0.0.1"
+edition = "2021"
+license = "Apache-2.0"
+authors = ["Optimal build agent"]
+repository = "https://github.com/Ronitdoes/optimal.git"
+rust-version = "1.80"
+
+# ---------------------------------------------------------------------------
+# Pinned dependencies.
+# ADR-001: canonical `gpui` 0.2.2, pinned here AND in Cargo.lock. On Windows we
+# disable the default wayland/x11 feature set and keep only `windows-manifest`.
+# ADR-003: windows-rs 0.61.x for all Win32/UIA/DPAPI access.
+# All other versions are resolved once into Cargo.lock; CI uses --locked.
+# ---------------------------------------------------------------------------
+[workspace.dependencies]
+gpui = { version = "=0.2.2", default-features = false, features = ["windows-manifest", "runtime_shaders"] }
+windows = { version = "=0.61.3", features = [
+    "Win32_Foundation",
+    "Win32_Security",
+    "Win32_Security_Cryptography",
+    "Win32_System_Threading",
+    "Win32_System_SystemInformation",
+    "Win32_System_Memory",
+    "Win32_System_Diagnostics_Debug",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_UI_HiDpi",
+    "Win32_UI_Shell",
+    "Win32_Storage_FileSystem",
+] }
+
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+toml = "0.9"
+thiserror = "2.0"
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+regex = "1"
+sha2 = "0.10"
+sha1 = "0.10"
+hex = "0.4"
+base64 = "0.22"
+serde_json5 = "0.1"
+
+tokio = { version = "1", features = ["full"] }
+async-trait = "0.1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+rusqlite = { version = "0.32", features = ["bundled", "uuid"] }
+tree-sitter = "=0.26.13"
+tree-sitter-powershell = "=0.26.6"
+z3 = { version = "0.19", features = ["bundled"] }
+
+trybuild = "1.0"
+tempfile = "3"
+csv = "1"
+
+# Internal crates
+optimal-common = { path = "crates/common" }
+optimal-policy = { path = "crates/policy" }
+optimal-registry = { path = "crates/registry" }
+optimal-tools = { path = "crates/tools" }
+optimal-runtime = { path = "crates/runtime" }
+optimal-store = { path = "crates/store" }
+optimal-gateway = { path = "crates/gateway" }
+optimal-telemetry = { path = "crates/telemetry" }
+optimal-guardian = { path = "crates/guardian" }
+optimal-ui = { path = "crates/ui" }
+
+[profile.release]
+strip = true
+lto = true
+codegen-units = 1
+panic = "abort"

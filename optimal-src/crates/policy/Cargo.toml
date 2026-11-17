@@ -1,0 +1,29 @@
+[package]
+name = "optimal-policy"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+optimal-common.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+toml.workspace = true
+regex.workspace = true
+thiserror.workspace = true
+tree-sitter = { workspace = true, optional = true }
+tree-sitter-powershell = { workspace = true, optional = true }
+z3 = { workspace = true, optional = true }
+
+[dev-dependencies]
+csv.workspace = true
+
+[features]
+default = []
+# Real Z3 load-time validation. Requires z3-sys (cmake + C++ toolchain) and is
+# enabled in CI where those prerequisites exist; the pure-Rust conservative
+# validator is used otherwise. Both fail closed.
+z3-validate = ["dep:z3"]
+# Tree-sitter PowerShell command splitting. The lexical splitter is the proven
+# fallback and is always compiled; this feature adds the AST-backed splitter.
+tree-sitter-split = ["dep:tree-sitter", "dep:tree-sitter-powershell"]

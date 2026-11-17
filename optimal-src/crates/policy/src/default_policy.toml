@@ -1,0 +1,84 @@
+# Optimal shipped baseline policy — deny-by-default (ADR-006).
+# Anything not matched here resolves to `never`. Unconditional floors in code
+# (metadata, path escape, download-exec, encoded shell, elevation, injection,
+# self-delete, destructive root) are evaluated before these rules and cannot be
+# lowered by them.
+
+version = 1
+default_tier = "never"
+
+# ---- Read-only inspection ----
+[[rules]]
+id = "git-read"
+kind = "regex"
+pattern = "^git (status|diff|log|show|branch|remote|ls-files|blame)"
+tier = "readonly"
+reason = "Read-only git inspection."
+
+[[rules]]
+id = "fs-read"
+kind = "regex"
+pattern = "^(pwd|get-location|get-childitem|gci|dir|ls|get-content|type|cat|gc|select-string|findstr)\\b"
+tier = "readonly"
+reason = "Read-only filesystem listing/read."
+
+# Absolute executable paths are canonicalized before matching.
+[[rules]]
+id = "git-exe-read"
+kind = "regex"
+pattern = '^.*git\.exe (status|diff|log|show|branch)'
+tier = "readonly"
+reason = "Read-only inspection via absolute git.exe path."
+
+[[rules]]
+id = "cmd-exe-read"
+kind = "regex"
+pattern = '^.*cmd\.exe /c (dir|echo|type)\b'
+tier = "readonly"
+reason = "Read-only builtin via absolute cmd.exe path."
+
+# ---- Package managers execute lifecycle scripts -> confirm minimum ----
+[[rules]]
+id = "npm-lifecycle"
+kind = "regex"
+pattern = "^npm "
+tier = "confirm"
+reason = "npm lifecycle scripts execute untrusted code."
+
+[[rules]]
+id = "npx-exec"
+kind = "regex"
+pattern = "^npx "
+tier = "confirm"
+reason = "npx fetches and executes a package."
+
+[[rules]]
+id = "npx-auto-consent"
+kind = "regex"
+pattern = "^npx (-y|--yes)"
+tier = "never"
+reason = "Auto-consent to package install is never."
+
+# ---- Git mutations ----
+[[rules]]
+id = "git-mutate"
+kind = "regex"
+pattern = "^git (push|commit|add|reset|checkout|merge|rebase|tag|config|fetch|pull|stash|clean)"
+tier = "confirm"
+reason = "Mutating or remote-affecting git operation."
+
+# ---- Scoped deletion (root deletion is a hard floor in code) ----
+[[rules]]
+id = "delete-scoped"
+kind = "regex"
+pattern = "^(remove-item|del|rm) "
+tier = "confirm"
+reason = "Deletion must be scoped and confirmed; Recycle Bin only where available."
+
+# ---- Arbitrary shell / process wrappers ----
+[[rules]]
+id = "shell-wrapper"
+kind = "regex"
+pattern = "^(cmd|powershell|pwsh|start|bash|sh|wsl) "
+tier = "confirm"
+reason = "Arbitrary shell or process launch."

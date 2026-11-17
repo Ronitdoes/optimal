@@ -1,0 +1,78 @@
+name: Optimal O0 CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  headless:
+    name: Workspace build + unit tests + eval harness
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: 1.100.0
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: optimal-src
+      - name: Build (locked)
+        working-directory: optimal-src
+        run: cargo build --workspace --locked
+      - name: Unit tests (locked)
+        working-directory: optimal-src
+        run: cargo test --workspace --locked
+      - name: Clippy -D warnings
+        working-directory: optimal-src
+        run: cargo clippy --workspace --locked --all-targets -- -D warnings
+      - name: O0 eval harness (rule table, scrubber, canary)
+        working-directory: optimal-src
+        run: cargo run --locked -p optimal-evals
+
+  gpu-window:
+    name: GPUI window build (pinned 0.2.2)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: 1.100.0
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: optimal-src
+      - name: Verify GPUI is the exact pinned version
+        working-directory: optimal-src
+        run: |
+          if (-not (Select-String -Path Cargo.toml -Pattern 'gpui = \{ version = "=0.2.2"' -Quiet)) {
+            throw 'GPUI is not pinned to =0.2.2 in Cargo.toml'
+          }
+          if (-not (Select-String -Path Cargo.lock -Pattern 'name = "gpui"' -Quiet)) {
+            throw 'gpui entry missing from Cargo.lock'
+          }
+          cargo tree --locked -p optimal-ui --features ui -i gpui
+      - name: Build single binary with UI
+        working-directory: optimal-src
+        run: cargo build --release --locked -p optimal --features ui
+
+  optional-validators:
+    name: Optional Z3 + tree-sitter validators
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: 1.100.0
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: optimal-src
+      - name: Z3 load validation (needs cmake on runner)
+        working-directory: optimal-src
+        run: cargo test --locked -p optimal-policy --features z3-validate
+      - name: Tree-sitter PowerShell command split
+        working-directory: optimal-src
+        run: cargo test --locked -p optimal-policy --features tree-sitter-split

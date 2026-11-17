@@ -1,0 +1,10 @@
+[package]
+name = "optimal-tools"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+optimal-common.workspace = true
+optimal-policy.workspace = true
+optimal-registry.workspace = true
