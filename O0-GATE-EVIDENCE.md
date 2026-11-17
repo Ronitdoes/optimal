@@ -41,8 +41,10 @@ Rust/cargo **1.100.0** (`x86_64-pc-windows-gnu`). GPUI **=0.2.2**, windows-rs **
 - Branch commits: `6ba30d1` (evidence), `1eecc25` (CI pin-check fix), `4c15414` (status).
 - PR: **#1** — https://github.com/Ronitdoes/optimal/pull/1 (`o0/integration` → `main`).
 - Remote `main` was kept at the seed commit `d271413` so the PR contains the O0 diff.
-- CI: run `44169888196` on PR #1. Headless job **completed/success**; GPUI-window and
-  optional-validator jobs were still running at time of writing (z3 builds from source).
-  An earlier run's GPUI job failed only on my `cargo tree -i gpui` pin-check step; that
-  step was rewritten to a deterministic Cargo.toml/Cargo.lock check.
+- CI: run `44178558021` on PR #1, commit `bce80de` — **all three jobs completed/success**
+  (headless, GPUI window, optional Z3 + tree-sitter validators).
+- Fixes made after initial CI failures: (1) deterministic GPUI pin check instead of
+  `cargo tree -i gpui`; (2) z3 0.19 uses a thread-local context — `Context::new` is
+  private; (3) the structural/floor validator now always runs, with Z3 as an
+  additional SMT pass, so both build modes enforce identical floors.
 - This file + `TESTLOG.md` + `DONE-DEFERRED.md` constitute the O0 gate evidence trail.

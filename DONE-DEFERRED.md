@@ -15,7 +15,7 @@
 | **O0.4** | Canonicalizer (case/slash/8.3/UNC/trailing-dot/escape); four tiers default `never`; unconditional floors; fail-closed load validator; tree-sitter PowerShell split (feature) | **PASS** — 70/70 rule-table tiers + canonicalization tests; tree-sitter feature tested | n/a |
 | **O0.5** | SQLite WAL events; event+projection+outbox+receipt+audit in one transaction; no-op receipts; forced sink redaction; hash chain; DPAPI vault refs | **PASS** — 12 tests incl. redaction, no-op receipt, tamper detection; DPAPI feature compiles | **BLOCKED** — live DPAPI seal/unseal on the target machine |
 | **O0.6** | Loopback JSON-RPC (`harness.v1.*`), capabilities handshake, constant-time auth, streaming into GPUI `UiState`, WS Host/Origin validation | **PASS** — 6 tests incl. end-to-end stream and DNS-rebinding rejection | **BLOCKED** — forged-Host WS upgrade from a second LAN machine |
-| **O0.7** | Eval harness (70-case rule table, canary, scrubber); CI workflow | **PASS** — harness exits 0 with all checks; `clippy -D warnings` clean; all workspace tests green | **BLOCKED** — GitHub Actions run not yet observed |
+| **O0.7** | Eval harness (70-case rule table, canary, scrubber); CI workflow | **PASS** — harness exits 0 with all checks; `clippy -D warnings` clean; all workspace tests green; GitHub Actions run 44178558021 all jobs success | n/a |
 
 **O0 exit gate:** multi-step task end-to-end (PASS), zero secrets (PASS), kill switch from UI + hotkey (PARTIAL — logic PASS, UI/hotkey BLOCKED), audit chain verifies (PASS), 60+ rule tests (PASS — 70). **Not fully green until the four BLOCKED human checks are executed.** No FAIL was observed; no FAIL was flipped to PASS.
 
@@ -40,6 +40,6 @@ From `Optimal/plan.md` §6 and `Optimal/tools.md` §3, plus cross-cutting exclus
 
 - **Rust 1.100.0 x86_64-pc-windows-gnu installed locally; system MinGW too old** — a portable MinGW-w64 + CMake was placed in gitignored `.tools/`. GitHub Actions uses its own Windows toolchain.
 - **`cargo build --release --features ui` is BLOCKED locally** — GPUI 0.2.2 `build.rs` requires `fxc.exe` (Windows SDK) in non-debug profiles; not present and installing it would require elevation (forbidden). Debug GPUI build and headless build PASS. CI on `windows-latest` has the SDK.
-- **Z3 native build is BLOCKED locally** — CMake + MinGW C++ toolchain quirk while compiling bundled Z3. Code targets z3 0.19 API; feature is default-off with a fail-closed pure-Rust validator; CI runs the Z3 job.
+- **Z3 native build is BLOCKED locally** (CMake + MinGW C++ toolchain quirk); **CI passes the Z3 job** on `windows-latest` (run 44178558021). Feature is default-off; the pure-Rust fail-closed validator always runs, Z3 adds an SMT pass when enabled.
 - **GitHub credentials are present** (git push authenticated in a dry run); PR creation via API was attempted during delivery — see `O0-GATE-EVIDENCE.md` for the outcome.
 - **Human-only UI/DPI/hotkey/screen-reader/second-LAN checks** are not executable by an agent and remain BLOCKED in `TESTLOG.md`.

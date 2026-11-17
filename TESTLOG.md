@@ -129,8 +129,8 @@ EVIDENCE:        .github/workflows/ci.yml, crates/evals (optimal-evals), clippy 
 FAIL SIGNAL:     none
 ROLLBACK:        none
 OWNER:           build agent
-NOTES:           CI itself has not been executed on GitHub Actions yet (no push/PR run observed
-                 at time of writing); local equivalent commands were executed.
+NOTES:           GitHub Actions run 44178558021 on PR #1 (commit bce80de) completed with all
+                 three jobs success: headless, GPUI window, optional Z3 + tree-sitter.
 ```
 
 ---
