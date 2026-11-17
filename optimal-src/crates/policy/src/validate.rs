@@ -130,15 +130,12 @@ impl PolicyValidator for Z3Validator {
 }
 
 /// Validate using the strongest validator available in this build.
+/// The structural/floor checks always run; Z3 adds an SMT satisfiability pass
+/// on top when enabled, so both build modes enforce identical safety floors.
 pub fn validate_config(cfg: &PolicyConfig) -> Result<(), String> {
+    PureRustValidator.validate(cfg)?;
     #[cfg(feature = "z3-validate")]
-    {
-        Z3Validator.validate(cfg)?;
-    }
-    #[cfg(not(feature = "z3-validate"))]
-    {
-        PureRustValidator.validate(cfg)?;
-    }
+    Z3Validator.validate(cfg)?;
     Ok(())
 }
 
