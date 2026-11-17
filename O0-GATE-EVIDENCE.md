@@ -38,7 +38,11 @@ Rust/cargo **1.100.0** (`x86_64-pc-windows-gnu`). GPUI **=0.2.2**, windows-rs **
 
 - Integration commit: `ff6dd2f` on branch `o0/integration` (pushed to origin).
 - Tag: **v0.0.1** (annotated, points at `ff6dd2f`, pushed to origin).
+- Latest branch commits: `6ba30d1` (evidence), `1eecc25` (CI pin-check fix).
 - PR: **#1** — https://github.com/Ronitdoes/optimal/pull/1 (`o0/integration` → `main`).
 - Remote `main` was kept at the seed commit `d271413` so the PR contains the O0 diff.
-- CI: run `44169095205` triggered on PR #1 (three jobs: headless, GPUI window, optional validators).
+- CI: run `44169888196` on PR #1. Headless job **completed/success**; GPUI-window and
+  optional-validator jobs were still running at time of writing (z3 builds from source).
+  An earlier run's GPUI job failed only on my `cargo tree -i gpui` pin-check step; that
+  step was rewritten to a deterministic Cargo.toml/Cargo.lock check.
 - This file + `TESTLOG.md` + `DONE-DEFERRED.md` constitute the O0 gate evidence trail.
