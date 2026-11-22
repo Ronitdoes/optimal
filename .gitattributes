@@ -1,0 +1,4 @@
+# Keep source line endings stable across Windows checkouts.
+* text=auto eol=lf
+*.png binary
+*.zip binary

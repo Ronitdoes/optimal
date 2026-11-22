@@ -33,3 +33,6 @@ desktop.ini
 
 # rustup bootstrap
 rustup-init.exe
+
+# local toolchain (not committed)
+.tools/
